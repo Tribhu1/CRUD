@@ -18,6 +18,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.get("/api/get", (req, res)=> {
     const getQuery = "select * from Customer";
     db.query(getQuery, (error, result)=> {
+        if(error){
+            console.log(error);
+        }
         res.send(result)
     })
 })
@@ -39,13 +42,39 @@ app.post("/api/post", (req, res) => {
         res.send("hello!");
     })
 })
-
-app.get("/", (req, res) => {
-    const sqlInsert = 'insert into Customer (name,email, mobile) values ("Ayush", "ayush@gmail.com","8076057432")';
-    db.query(sqlInsert, (error, result)=>{
-        if(error){
+app.delete("/api/remove/:id", (req, res) => {
+    const {id} = req.params;
+    const sqlRemove = `delete from Customer Where id = ?`;
+    db.query(sqlRemove, id, (error, result)=>{
         console.log("error",error);
-        }
+        console.log("result",result);
+        res.send("hello!");
+    })
+})
+
+app.get("/api/get/:id", (req, res)=> {
+    let { id } = req.params
+    const getQuery = "select * from Customer where id = ?";
+    db.query(getQuery, id, (error, result)=> {
+
+        res.send(result)
+    })
+})
+app.put("/api/update/:id", (req, res) => {
+    const {id} = req.params;
+    const {name, email, contact} = req.body;
+    let customerDetails = {
+        name: name,
+        email: email,
+        contact : contact
+    }
+    let colms = Object.keys(customerDetails);
+    let values = Object.values(customerDetails)
+    let qs = colms.map(q => '?');
+    const sqlUpdate = `insert Customer set (${colms.join(',')}) values (${qs.join(',')}) where id = ?`;
+    db.query(sqlUpdate, [...values, id], (error, result)=>{
+        console.log("error",error);
+        console.log("result",result);
     })
     
 })

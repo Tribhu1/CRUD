@@ -12,6 +12,14 @@ const Home = () => {
   useEffect(() => {
     loadData();
   }, []);
+
+  const deleteContact =(id)=>{
+    if(window.confirm("Are you sure that you want to delete contact!")){
+      axios.delete(`http://localhost:3000/api/remove/${id}`);
+      toast.success("contact deleted successfully!");
+      setTimeout(()=> loadData(), 500);
+    }
+  }
   return (
     <div style={{ marginTop: "150px" }}>
         <Link to="/addContact">
@@ -42,7 +50,9 @@ const Home = () => {
                   <Link to={`view/${item.id}`}>
                     <button className="btn btn-view">View</button>
                   </Link>
-                  <button className="btn btn-delete">Delete</button>
+                  <button className="btn btn-delete" onClick={()=>
+                  deleteContact(item.id)
+                  }>Delete</button>
                 </td>
               </tr>
             );
