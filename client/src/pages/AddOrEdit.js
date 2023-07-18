@@ -4,11 +4,11 @@ import "./AddOrEdit.css"
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const initialState = {
-    name:"",
-    email:"",
-    contact:"",
-}
+// const initialState = {
+//     name:"",
+//     email:"",
+//     contact:"",
+// }
 const history = useHistory();
 
 const AddOrEdit= () =>{
